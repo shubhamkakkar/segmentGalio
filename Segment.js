@@ -33,55 +33,56 @@ export default class Segment extends React.PureComponent {
       tiles,
       inactiveTabTextStyle,
       activeTabTextStyle,
-      activeTabHighlighterPanelColor
+      activeTabHighlighterPanelColor,
+      children
     } = this.props;
     return (
-      <View>
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          horizontal={segmentType === "default" || segmentType === "horizontal"}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
-          <Tiles
-            {...{
-              tiles,
-              segmentType,
-              inactiveTabTextStyle,
-              activeTabTextStyle
-            }}
-            startAnimation={this.startAnimation}
+      <View style={{ flex: 1 }}>
+        <View>
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal={segmentType === "default" || segmentType === "horizontal"}
+            contentContainerStyle={{ flexGrow: 1 }}
           >
-            {segmentType !== "vertical" && (
-              <TilesDimensionPropConsumer>
-                {
-                  animaterWidth => (
-                    <ActiveTilePropConsumer>
-                      {activeTile => (
-                        <Animated.View
-                          style={{
-                            position: "absolute",
-                            bottom: 0,
-                            left: this.animaterPosition,
-                            flex: 1,
-                            width: animaterWidth[activeTile],
-                            height: 2,
-                            backgroundColor: activeTabHighlighterPanelColor
-                          }}
-                        />
-                      )
-                      }
-                    </ActiveTilePropConsumer>
-
-
-                  )
-                }
-              </TilesDimensionPropConsumer>
-            )}
-          </Tiles>
-        </ScrollView>
-        <View style={{ flex: 1, backgroundColor: "red" }}>
-          {this.props.children}
+            <Tiles
+              {...{
+                tiles,
+                segmentType,
+                inactiveTabTextStyle,
+                activeTabTextStyle
+              }}
+              startAnimation={this.startAnimation}
+            >
+              {segmentType !== "vertical" && (
+                <TilesDimensionPropConsumer>
+                  {
+                    animaterWidth => (
+                      <ActiveTilePropConsumer>
+                        {activeTile => (
+                          <Animated.View
+                            style={{
+                              position: "absolute",
+                              bottom: 0,
+                              left: this.animaterPosition,
+                              flex: 1,
+                              width: animaterWidth[activeTile],
+                              height: 2,
+                              backgroundColor: activeTabHighlighterPanelColor
+                            }}
+                          />
+                        )
+                        }
+                      </ActiveTilePropConsumer>
+                    )
+                  }
+                </TilesDimensionPropConsumer>
+              )}
+            </Tiles>
+          </ScrollView>
         </View>
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} >
+          {children}
+        </ScrollView>
       </View>
     );
   }

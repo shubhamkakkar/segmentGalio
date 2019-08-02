@@ -5,9 +5,9 @@ import { View, Text } from "react-native";
 
 function TabPanel({ children }) {
   return (
-    <View>
+    <>
       {children}
-    </View>
+    </>
   )
 }
 
