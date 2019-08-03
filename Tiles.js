@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableNativeFeedback, Dimensions } from "react-native";
+import { View, Text, TouchableNativeFeedback, Dimensions, ScrollView } from "react-native";
 import { ActiveTilePropProvider } from "./Context/ActiveTileContext";
 import { TilesDimensionPropProvider } from "./Context/TileDimensionsContext";
 
@@ -17,8 +17,11 @@ export default function Titles({
   segmentType,
   inactiveTabTextStyle,
   activeTabTextStyle,
-  startAnimation
+  startAnimation,
+  tabPanels
 }) {
+
+
   const [activeTile, setActiveTile] = React.useState(0)
   const [tilesDimensions, setTilesDimensions] = React.useState([])
 
@@ -34,84 +37,102 @@ export default function Titles({
     if (tilesDimensions.length) {
       startAnimation(tilesDimensions, activeTile)
     }
+    console.log({ activeTile })
   }, [activeTile])
   return (
     <ActiveTilePropProvider value={activeTile}>
-      <TilesDimensionPropProvider value={tilesDimensions}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection:
-              segmentType === "default" || segmentType === "horizontal"
-                ? "row"
-                : "column"
-          }}
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          horizontal={segmentType === "default" || segmentType === "horizontal"}
+          contentContainerStyle={{ flexGrow: 1 }}
         >
-          {tiles.map((res, key) => (
-            <TouchableNativeFeedback
+          <TilesDimensionPropProvider value={tilesDimensions}>
+            <View
               style={{
-                flex: 1
-              }}
-              onLayout={({
-                nativeEvent: {
-                  layout: { width }
-                }
-              }) => setLayout(width)}
-              onPress={e => {
-                setActiveTile(key)
-                onPressCustom && onPressCustom(e);
-              }}
-              onPressIn={e => {
-                onPressInCustom && onPressInCustom(e);
-              }}
-              onPressOut={e => {
-                onPressOutCustom && onPressOutCustom(e);
-              }}
-              onLongPress={e => {
-                onLongPressCustom && onLongPressCustom(e);
-              }}
-              {...{
-                key,
-                delayPressIn,
-                delayPressOut,
-                delayLongPress
+                flex: 1,
+                flexDirection:
+                  segmentType === "default" || segmentType === "horizontal"
+                    ? "row"
+                    : "column"
               }}
             >
-              <View
-                style={{
-                  padding: 10,
-                  flex: 1,
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  borderBottomWidth: 1,
-                  borderBottomColor:
-                    segmentType === "vertical"
-                      ? activeTile === key
-                        ? "black"
-                        : "#CFCFCF"
-                      : "#CFCFCF",
-                  minWidth: deviceWidth / 5
-                }}
-              >
-                <Text
-                  style={[
-                    activeTile === key ? activeTabTextStyle : inactiveTabTextStyle,
-                    {
-                      color:
-                        activeTile === key
-                          ? inactiveTabTextStyle.color
-                          : activeTabTextStyle.color
+              {tiles.map((res, key) => (
+                <TouchableNativeFeedback
+                  style={{
+                    flex: 1
+                  }}
+                  onLayout={({
+                    nativeEvent: {
+                      layout: { width }
                     }
-                  ]}
+                  }) => setLayout(width)}
+                  onPress={e => {
+                    setActiveTile(key)
+                    onPressCustom && onPressCustom(e);
+                  }}
+                  onPressIn={e => {
+                    onPressInCustom && onPressInCustom(e);
+                  }}
+                  onPressOut={e => {
+                    onPressOutCustom && onPressOutCustom(e);
+                  }}
+                  onLongPress={e => {
+                    onLongPressCustom && onLongPressCustom(e);
+                  }}
+                  {...{
+                    key,
+                    delayPressIn,
+                    delayPressOut,
+                    delayLongPress
+                  }}
                 >
-                  {res}
-                </Text>
-              </View>
-            </TouchableNativeFeedback>
-          ))}
-          {children}
-        </View>
-      </TilesDimensionPropProvider>
+                  <View
+                    style={{
+                      padding: 10,
+                      flex: 1,
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                      borderBottomWidth: 1,
+                      borderBottomColor:
+                        segmentType === "vertical"
+                          ? activeTile === key
+                            ? "black"
+                            : "#CFCFCF"
+                          : "#CFCFCF",
+                      minWidth: deviceWidth / 5
+                    }}
+                  >
+                    <Text
+                      style={[
+                        activeTile === key ? activeTabTextStyle : inactiveTabTextStyle,
+                        {
+                          color:
+                            activeTile === key
+                              ? inactiveTabTextStyle.color
+                              : activeTabTextStyle.color
+                        }
+                      ]}
+                    >
+                      {res}
+                    </Text>
+                  </View>
+                </TouchableNativeFeedback>
+              ))}
+              {children}
+            </View>
+          </TilesDimensionPropProvider>
+        </ScrollView>
+        {
+          tabPanels.map(({ index, child }) => {
+            if (index === activeTile) {
+              return (
+                <View key={index} style={{ flex: 1, backgroundColor: "red" }}>
+                  {child}
+                </View>
+              )
+            }
+          })
+        }
     </ActiveTilePropProvider>
   );
 }

@@ -2,12 +2,13 @@ import React from "react";
 import Segment from "./Segment";
 import { View, Text } from "react-native";
 
-
-function TabPanel({ children }) {
+function Panel({ title }) {
   return (
-    <>
-      {children}
-    </>
+    <View>
+      <Text>
+        {title}
+      </Text>
+    </View>
   )
 }
 
@@ -20,14 +21,17 @@ export default function App() {
       inactiveTabTextStyle={{ color: "red" }}
       activeTabTextStyle={{ color: "green" }}
       activeTabHighlighterPanelColor={"teal"}
-    >
-      <TabPanel>
-        <View style={{ flex: 1, backgroundColor: "red" }}>
-          <Text>
-            shubham kakkar
-        </Text>
-        </View>
-      </TabPanel>
-    </Segment>
+      tabPanels={[
+        {
+          index: 0,
+          child: <Panel title="Shubham kakkar" />
+        },
+        {
+          index: 1,
+          child: <Panel title="title" />
+        },
+
+      ]}
+    />
   );
 }
