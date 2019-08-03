@@ -37,10 +37,10 @@ export default function Titles({
     if (tilesDimensions.length) {
       startAnimation(tilesDimensions, activeTile)
     }
-    console.log({ activeTile })
   }, [activeTile])
   return (
     <ActiveTilePropProvider value={activeTile}>
+      <View>
         <ScrollView
           showsHorizontalScrollIndicator={false}
           horizontal={segmentType === "default" || segmentType === "horizontal"}
@@ -122,17 +122,12 @@ export default function Titles({
             </View>
           </TilesDimensionPropProvider>
         </ScrollView>
-        {
-          tabPanels.map(({ index, child }) => {
-            if (index === activeTile) {
-              return (
-                <View key={index} style={{ flex: 1, backgroundColor: "red" }}>
-                  {child}
-                </View>
-              )
-            }
-          })
-        }
+      </View>
+        {tabPanels.map((res, key) => (
+          <React.Fragment {...{ key }}>
+            {activeTile === key && res}
+          </React.Fragment>
+        ))}
     </ActiveTilePropProvider>
   );
 }

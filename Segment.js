@@ -28,10 +28,6 @@ export default class Segment extends React.PureComponent {
   };
 
 
-  componentDidUpdate() {
-    console.log("props", this.props)
-  }
-
   render() {
     const {
       segmentType,
@@ -39,49 +35,48 @@ export default class Segment extends React.PureComponent {
       inactiveTabTextStyle,
       activeTabTextStyle,
       activeTabHighlighterPanelColor,
-      tabPanels
+      children
     } = this.props;
 
-    console.log({ tabPanels })
 
     return (
-      <View>
-          <Tiles
-            {...{
-              tiles,
-              segmentType,
-              inactiveTabTextStyle,
-              activeTabTextStyle,
-              tabPanels
-            }}
-            startAnimation={this.startAnimation}
-          >
-            {segmentType !== "vertical" && (
-              <TilesDimensionPropConsumer>
-                {
-                  animaterWidth => (
-                    <ActiveTilePropConsumer>
-                      {activeTile => (
-                        <Animated.View
-                          style={{
-                            position: "absolute",
-                            bottom: 0,
-                            left: this.animaterPosition,
-                            flex: 1,
-                            width: animaterWidth[activeTile],
-                            height: 2,
-                            backgroundColor: activeTabHighlighterPanelColor
-                          }}
-                        />
-                      )
-                      }
-                    </ActiveTilePropConsumer>
-                  )
-                }
-              </TilesDimensionPropConsumer>
-            )}
-          </Tiles>
-      </View>
+      <View style={{ flex: 1 }}>
+        <Tiles
+          {...{
+            tiles,
+            segmentType,
+            inactiveTabTextStyle,
+            activeTabTextStyle,
+          }}
+          tabPanels={children}
+          startAnimation={this.startAnimation}
+        >
+          {segmentType !== "vertical" && (
+            <TilesDimensionPropConsumer>
+              {
+                animaterWidth => (
+                  <ActiveTilePropConsumer>
+                    {activeTile => (
+                      <Animated.View
+                        style={{
+                          position: "absolute",
+                          bottom: 0,
+                          left: this.animaterPosition,
+                          flex: 1,
+                          width: animaterWidth[activeTile],
+                          height: 2,
+                          backgroundColor: activeTabHighlighterPanelColor
+                        }}
+                      />
+                    )
+                    }
+                  </ActiveTilePropConsumer>
+                )
+              }
+            </TilesDimensionPropConsumer>
+          )}
+        </Tiles>
+        </View>
     );
   }
 }

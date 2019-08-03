@@ -4,8 +4,8 @@ import { View, Text } from "react-native";
 
 function Panel({ title }) {
   return (
-    <View>
-      <Text>
+    <View style={{ flex: 1, backgroundColor: "orange" }}>
+      <Text style={{ color: "red" }}>
         {title}
       </Text>
     </View>
@@ -14,6 +14,7 @@ function Panel({ title }) {
 
 export default function App() {
   return (
+    <>
     <Segment
       tiles={["tile A", "tile B", "tile C", "title D"]}
       borderRadius={20}
@@ -21,17 +22,23 @@ export default function App() {
       inactiveTabTextStyle={{ color: "red" }}
       activeTabTextStyle={{ color: "green" }}
       activeTabHighlighterPanelColor={"teal"}
-      tabPanels={[
-        {
-          index: 0,
-          child: <Panel title="Shubham kakkar" />
-        },
-        {
-          index: 1,
-          child: <Panel title="title" />
-        },
-
-      ]}
-    />
+    >
+      <Panel title="Shubham kakkar" />
+      <Panel title="title" />
+    </Segment>
+        <Segment
+        tiles={["tile A", "tile B", "tile C", "title D"]}
+        borderRadius={20}
+        segmentType={"default"}
+        inactiveTabTextStyle={{ color: "red" }}
+        activeTabTextStyle={{ color: "green" }}
+        activeTabHighlighterPanelColor={"teal"}
+      >
+        <Panel title="Shubham kakkar" />
+        <Panel title="title" />
+      </Segment>
+      </>
   );
 }
+
+ // TODO: this.props.children[index] for segment
